@@ -40,17 +40,17 @@ function submit() {
     <form class="form">
       <div class="form-group">
         <label class="form-label" for="delivery_name">Name</label>
-        <input v-model="$v.form.recipient.$model" type="text" placeholder="Recipients Name"
+        <input v-model="$v.recipient.$model" type="text" placeholder="Recipients Name"
           class="form-control" id="delivery_name">
-        <div v-if="$v.form.recipient.$error" class="error">field is required</div>
+        <div v-if="$v.recipient.$error" class="error">field is required</div>
       </div>
 
       <div class="form-group">
         <label class="form-label" for="address">Address</label>
-        <textarea v-model="$v.form.address.$model"
+        <textarea v-model="($v.address.$model as string)"
           placeholder="London Street 470978 New England" rows="3" class="form-control"
           id="address"></textarea>
-        <div v-if="$v.form.address.$error" class="error">field is required</div>
+        <div v-if="$v.address.$error" class="error">field is required</div>
       </div>
     </form>
   </div>

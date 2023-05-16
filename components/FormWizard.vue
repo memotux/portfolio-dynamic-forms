@@ -38,7 +38,7 @@ function processStep(payload: Partial<FormWizard>) {
     <FormPlanPicker v-if="currentStepNumber === 1" @update="processStep" />
     <FormUserDetails v-if="currentStepNumber === 2" @update="processStep" />
     <FormAddress v-if="currentStepNumber === 3" @update="processStep" />
-    <!-- <FormReviewOrder v-if="currentStepNumber === 4" /> -->
+    <FormReviewOrder v-if="currentStepNumber === 4" @update="processStep" />
 
     <div class="progress-bar">
       <div :style="`width: ${progress}%;`"></div>
