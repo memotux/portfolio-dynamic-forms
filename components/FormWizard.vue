@@ -7,6 +7,7 @@ useSeoMeta({
 
 const currentStepNumber = ref(1)
 const length = ref(4)
+const canGoNext = ref(false)
 const form = reactive<FormWizard>({
   plan: null,
   email: null,
@@ -27,9 +28,11 @@ function goBack() {
 }
 function goNext() {
   currentStepNumber.value += 1
+  canGoNext.value = false
 }
 function processStep(payload: Partial<FormWizard>) {
   Object.assign(form, payload)
+  canGoNext.value = true
 }
 </script>
 
@@ -53,6 +56,7 @@ function processStep(payload: Partial<FormWizard>) {
       </button>
       <button
         @click="goNext"
+        :disabled="!canGoNext"
         class="btn">Next</button>
     </div>
 
