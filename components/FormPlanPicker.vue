@@ -1,3 +1,52 @@
+<script setup lang="ts">
+import { useVuelidate } from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
+
+import type { Plan } from '@/types'
+
+const plans: Plan[] = [
+  {
+    price: 19,
+    weight: '250g',
+    name: 'The Single',
+    description: 'One bag of freshly roasted coffee beans delivered to your house every month'
+  },
+  {
+    price: 29,
+    weight: '500g',
+    name: 'The Curious',
+    description: 'Two different types of freshly roasted coffee every month'
+  },
+  {
+    price: 49,
+    weight: '1kg',
+    name: 'The Addict',
+    description: 'Two bags of two different types of freshly roasted coffee every month.'
+  }
+]
+
+const emit = defineEmits<{
+  (e: 'update', payload: { plan: Plan }): void
+}>()
+
+const validations = {
+  selectedPlan: {
+    required
+  }
+}
+const state = reactive<{ selectedPlan: Plan | null }>({
+  selectedPlan: null
+})
+
+const $v = useVuelidate(validations, state)
+
+function pickPlan(payload: Plan) {
+  state.selectedPlan = payload
+
+  emit('update', { plan: payload })
+}
+</script>
+
 <template>
   <div>
     <h1 class="title">Coffee Plans</h1>
@@ -34,53 +83,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { useVuelidate } from '@vuelidate/core'
-import { required } from '@vuelidate/validators'
-
-import type { Plan } from '@/types'
-
-const emit = defineEmits<{
-  (e: 'update', plan: Plan): void
-}>()
-
-const validations = {
-  selectedPlan: {
-    required
-  }
-}
-const state = reactive<{ selectedPlan: Plan | null }>({
-  selectedPlan: null
-})
-
-const $v = useVuelidate(validations, state)
-
-const plans: Plan[] = [
-  {
-    price: 19,
-    weight: '250g',
-    name: 'The Single',
-    description: 'One bag of freshly roasted coffee beans delivered to your house every month'
-  },
-  {
-    price: 29,
-    weight: '500g',
-    name: 'The Curious',
-    description: 'Two different types of freshly roasted coffee every month'
-  },
-  {
-    price: 49,
-    weight: '1kg',
-    name: 'The Addict',
-    description: 'Two bags of two different types of freshly roasted coffee every month.'
-  }
-]
-
-function pickPlan(plan: Plan) {
-  state.selectedPlan = plan
-
-  emit('update', state.selectedPlan)
-}
-
-</script>
