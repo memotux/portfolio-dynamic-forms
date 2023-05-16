@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { FormWizard } from '~/types';
-
 useSeoMeta({
   title: 'Liquid Gold Box'
 })
@@ -8,7 +6,14 @@ useSeoMeta({
 const { form, canGoNext } = useWizard()
 
 const currentStepNumber = ref(1)
-const length = ref(4)
+const steps = [
+  resolveComponent('FormPlanPicker'),
+  resolveComponent('FormUserDetails'),
+  resolveComponent('FormAddress'),
+  resolveComponent('FormReviewOrder'),
+]
+const length = computed(() => steps.length)
+const currentStep = computed(() => steps[currentStepNumber.value - 1])
 
 const progress = computed(() => {
   return currentStepNumber.value / length.value * 100
@@ -25,10 +30,7 @@ function goNext() {
 
 <template>
   <div>
-    <FormPlanPicker v-if="currentStepNumber === 1" />
-    <FormUserDetails v-if="currentStepNumber === 2" />
-    <FormAddress v-if="currentStepNumber === 3" />
-    <FormReviewOrder v-if="currentStepNumber === 4" />
+    <component :is="currentStep" />
 
     <div class="progress-bar">
       <div :style="`width: ${progress}%;`"></div>
