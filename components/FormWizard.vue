@@ -1,23 +1,14 @@
 <script setup lang="ts">
-import type { FormWizard } from '@/types'
+import { FormWizard } from '~/types';
 
 useSeoMeta({
   title: 'Liquid Gold Box'
 })
 
+const { form, canGoNext } = useWizard()
+
 const currentStepNumber = ref(1)
 const length = ref(4)
-const canGoNext = ref(false)
-const form = reactive<FormWizard>({
-  plan: null,
-  email: null,
-  name: null,
-  password: null,
-  address: null,
-  recipient: null,
-  chocolate: false,
-  otherTreat: false
-})
 
 const progress = computed(() => {
   return currentStepNumber.value / length.value * 100
@@ -30,18 +21,14 @@ function goNext() {
   currentStepNumber.value += 1
   canGoNext.value = false
 }
-function processStep(payload: Partial<FormWizard>) {
-  Object.assign(form, payload)
-  canGoNext.value = true
-}
 </script>
 
 <template>
   <div>
-    <FormPlanPicker v-if="currentStepNumber === 1" @update="processStep" />
-    <FormUserDetails v-if="currentStepNumber === 2" @update="processStep" />
-    <FormAddress v-if="currentStepNumber === 3" @update="processStep" />
-    <FormReviewOrder v-if="currentStepNumber === 4" @update="processStep" />
+    <FormPlanPicker v-if="currentStepNumber === 1" />
+    <FormUserDetails v-if="currentStepNumber === 2" />
+    <FormAddress v-if="currentStepNumber === 3" />
+    <FormReviewOrder v-if="currentStepNumber === 4" />
 
     <div class="progress-bar">
       <div :style="`width: ${progress}%;`"></div>

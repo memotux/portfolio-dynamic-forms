@@ -3,9 +3,7 @@ import { useVuelidate } from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
 import type { FormWizard } from '~/types';
 
-const emit = defineEmits<{
-  (e: 'update', data: typeof form): void
-}>()
+const { processStep } = useWizard()
 
 const validations = {
   email: {
@@ -30,7 +28,7 @@ const $v = useVuelidate(validations, form)
 
 function submit() {
   if (!$v.value.$invalid) {
-    emit('update', { ...form })
+    processStep({ ...form })
   }
 }
 </script>

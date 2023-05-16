@@ -3,13 +3,11 @@ import { useVuelidate } from "@vuelidate/core";
 import { required } from '@vuelidate/validators'
 import type { FormWizard } from "~/types";
 
-const emit = defineEmits<{
-  (e: 'update', payload: Pick<FormWizard, 'address' | 'recipient'>): void
-}>()
+const { form, processStep } = useWizard()
 
-const form = reactive<Pick<FormWizard, 'address' | 'recipient'>>({
+const state = reactive<Pick<FormWizard, 'address' | 'recipient'>>({
   address: null,
-  recipient: null
+  recipient: form.name
 })
 const validations = {
   address: {
@@ -20,11 +18,11 @@ const validations = {
   }
 }
 
-const $v = useVuelidate(validations, form)
+const $v = useVuelidate(validations, state)
 
 function submit() {
   if (!$v.value.$invalid) {
-    emit('update', { ...form })
+    processStep({ ...state })
   }
 }
 </script>

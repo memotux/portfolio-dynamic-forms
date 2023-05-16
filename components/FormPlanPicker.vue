@@ -25,9 +25,7 @@ const plans: Plan[] = [
   }
 ]
 
-const emit = defineEmits<{
-  (e: 'update', payload: { plan: Plan }): void
-}>()
+const { processStep } = useWizard()
 
 const validations = {
   selectedPlan: {
@@ -43,7 +41,9 @@ const $v = useVuelidate(validations, state)
 function pickPlan(payload: Plan) {
   state.selectedPlan = payload
 
-  emit('update', { plan: payload })
+  if (!$v.value.$invalid) {
+    processStep({ plan: payload })
+  }
 }
 </script>
 
@@ -60,7 +60,7 @@ function pickPlan(payload: Plan) {
         v-for="plan in plans"
         :key="plan.price"
         @click="pickPlan(plan)"
-        :class="{ 'active-plan': state.selectedPlan === plan }"
+        :class="{ 'active-plan': state.selectedPlan?.name === plan.name }"
         class="plan">
         <div class="weight">
           {{ plan.weight }}

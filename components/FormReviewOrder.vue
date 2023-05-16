@@ -1,21 +1,16 @@
 <script setup lang="ts">
-import { FormWizard } from '~/types';
+const { form } = useWizard()
 
-
-const emit = defineEmits<{
-  (e: 'update', payload: Pick<FormWizard, 'chocolate' | 'otherTreat'>): void
-}>()
-const form = reactive({
-  chocolate: false,
-  otherTreat: false
-})
 const totalPrice = computed(() => {
-  return 0
+  let total = form.plan?.price || 0
+  if (form.chocolate) {
+    total += 4
+  }
+  if (form.otherTreat) {
+    total += 2
+  }
+  return total
 })
-
-function submit() {
-  emit('update', { ...form })
-}
 </script>
 
 <template>
@@ -36,15 +31,15 @@ function submit() {
       <div class="plans">
         <div class="plan active-plan">
           <div class="weight">
-            PLAN WEIGHT
+            {{ form.plan?.weight }}
           </div>
 
           <div class="description">
             <span class="title">
-              PLAN NAME
+              {{ form.plan?.name }}
             </span>
             <span class="description">
-              PLAN DESC
+              {{ form.plan?.description }}
             </span>
           </div>
 
@@ -63,15 +58,16 @@ function submit() {
         Treat yourself by leveling up your monthly box
       </p>
 
-      <div @input="submit" class="options">
+      <div class="options">
         <div class="option">
-          <input v-model="form.chocolate" type="checkbox" value="chocolate" id="chocolate">
+          <input v-model="form.chocolate" type="checkbox" value="chocolate"
+            id="chocolate" />
           <label for="chocolate">4 pcs. Single Origin Chocolate (+$4/month)</label>
         </div>
 
         <div class="option">
           <input v-model="form.otherTreat" type="checkbox" value="chocolate"
-            id="other_treat">
+            id="other_treat" />
           <label for="other_treat">Another delicious treat (+$2/month)</label>
         </div>
       </div>
@@ -85,9 +81,9 @@ function submit() {
         </div>
 
         <div class="w-1/3">
-          <h3>RECIPIENT</h3>
+          <h3>{{ form.recipient }}</h3>
           <p class="leading-normal">
-            ADDRESS
+            {{ form.address }}
           </p>
         </div>
       </div>
