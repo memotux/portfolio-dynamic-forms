@@ -1,5 +1,5 @@
 {
-  "name": "nuxt-app",
+  "name": "@memotux/portfolio-dynamic-forms",
   "private": true,
   "scripts": {
     "build": "nuxt build",
