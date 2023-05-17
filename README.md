@@ -7,6 +7,10 @@ Inspired by [VueSchool Dynamic Form Course](https://vueschool.io/courses/dynamic
 ## Features
 
 - Nuxt 3
+- Vuelidate
+- Vue Composable
+- Vue `watchEffect`
+- Vue Dynamic Components
 
 ## Setup
 
