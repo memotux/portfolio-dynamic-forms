@@ -24,7 +24,6 @@ function goBack() {
 }
 function goNext() {
   currentStepNumber.value += 1
-  canGoNext.value = false
 }
 </script>
 

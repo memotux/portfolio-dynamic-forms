@@ -3,11 +3,11 @@ import { useVuelidate } from "@vuelidate/core";
 import { required } from '@vuelidate/validators'
 import type { FormWizard } from "~/types";
 
-const { form, processStep } = useWizard()
+const { form, processStep, canGoNext } = useWizard()
 
 const state = reactive<Pick<FormWizard, 'address' | 'recipient'>>({
-  address: null,
-  recipient: form.name
+  address: form.address,
+  recipient: form.recipient || form.name
 })
 const validations = {
   address: {
@@ -25,6 +25,15 @@ function submit() {
     processStep({ ...state })
   }
 }
+
+watchEffect(() => {
+  if ($v.value.$invalid && canGoNext.value) {
+    canGoNext.value = false
+  }
+  if (!$v.value.$invalid && !canGoNext.value) {
+    canGoNext.value = true
+  }
+})
 </script>
 
 <template>

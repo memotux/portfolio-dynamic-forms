@@ -1,4 +1,4 @@
-import { FormWizard } from "~/types"
+import type { FormWizard } from "~/types"
 
 const form = reactive<FormWizard>({
   plan: null,

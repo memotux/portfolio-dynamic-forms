@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { useVuelidate } from '@vuelidate/core'
-import { required } from '@vuelidate/validators'
-
 import type { Plan } from '@/types'
 
 const plans: Plan[] = [
@@ -25,26 +22,16 @@ const plans: Plan[] = [
   }
 ]
 
-const { processStep } = useWizard()
-
-const validations = {
-  selectedPlan: {
-    required
-  }
-}
-const state = reactive<{ selectedPlan: Plan | null }>({
-  selectedPlan: null
-})
-
-const $v = useVuelidate(validations, state)
+const { form, processStep, canGoNext } = useWizard()
 
 function pickPlan(payload: Plan) {
-  state.selectedPlan = payload
-
-  if (!$v.value.$invalid) {
-    processStep({ plan: payload })
-  }
+  processStep({ plan: payload })
 }
+watchEffect(() => {
+  if (form.plan) {
+    canGoNext.value = true
+  }
+})
 </script>
 
 <template>
@@ -60,7 +47,7 @@ function pickPlan(payload: Plan) {
         v-for="plan in plans"
         :key="plan.price"
         @click="pickPlan(plan)"
-        :class="{ 'active-plan': state.selectedPlan?.name === plan.name }"
+        :class="{ 'active-plan': form.plan?.name === plan.name }"
         class="plan">
         <div class="weight">
           {{ plan.weight }}
@@ -79,7 +66,7 @@ function pickPlan(payload: Plan) {
         </div>
       </div>
     </div>
-    <div v-if="$v.selectedPlan.$error" class="error">you should pick a plan to continue
-    </div>
+    <!-- <div v-if="!state.selectedPlan" class="error">you should pick a plan to continue
+    </div> -->
   </div>
 </template>

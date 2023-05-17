@@ -3,7 +3,7 @@ import { useVuelidate } from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
 import type { FormWizard } from '~/types';
 
-const { processStep } = useWizard()
+const { form, processStep, canGoNext } = useWizard()
 
 const validations = {
   email: {
@@ -18,19 +18,28 @@ const validations = {
   }
 }
 
-const form = reactive<Pick<FormWizard, 'email' | 'password' | 'name'>>({
-  email: null,
-  password: null,
-  name: null,
+const state = reactive<Pick<FormWizard, 'email' | 'password' | 'name'>>({
+  email: form.email,
+  password: form.password,
+  name: form.name,
 })
 
-const $v = useVuelidate(validations, form)
+const $v = useVuelidate(validations, state)
 
 function submit() {
   if (!$v.value.$invalid) {
-    processStep({ ...form })
+    processStep({ ...state })
   }
 }
+
+watchEffect(() => {
+  if ($v.value.$invalid && canGoNext.value) {
+    canGoNext.value = false
+  }
+  if (!$v.value.$invalid && !canGoNext.value) {
+    canGoNext.value = true
+  }
+})
 </script>
 
 <template>
