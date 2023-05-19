@@ -61,8 +61,10 @@ function submit(payload: Plan) {
         </div>
       </div>
     </div>
-    <div v-if="$v.plan.$error" class="error">
-      you should pick a plan to continue
-    </div>
+    <Transition name="wizard">
+      <div v-if="$v.plan.$error" class="error">
+        you should pick a plan to continue
+      </div>
+    </Transition>
   </div>
 </template>

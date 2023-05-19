@@ -28,38 +28,40 @@ const isFormComplete = computed(() => currentStepNumber.value === steps.length)
 
 <template>
   <div>
-    <template v-if="showCompleteMessage">
-      <h1 class="title">Thank you!</h1>
-      <h2 class="subtitle">
-        We look forward to shipping you your first box!
-      </h2>
+    <Transition name="wizard" mode="out-in">
+      <div v-if="showCompleteMessage">
+        <h1 class="title">Thank you!</h1>
+        <h2 class="subtitle">
+          We look forward to shipping you your first box!
+        </h2>
 
-      <div style="display: flex;justify-content: center; gap: 1rem;">
-        <a href="https://vueschool.io" target="_blank" class="btn">Go somewhere cool!</a>
-        <button class="btn" @click="restart">Make another order</button>
+        <div style="display: flex;justify-content: center; gap: 1rem;">
+          <a href="https://vueschool.io" target="_blank" class="btn">Go somewhere cool!</a>
+          <button class="btn" @click="restart">Make another order</button>
+        </div>
       </div>
-    </template>
-    <template v-else>
-      <Transition name="wizard">
-        <component :is="currentStep" />
-      </Transition>
+      <div v-else>
+        <Transition name="wizard">
+          <component :is="currentStep" />
+        </Transition>
 
-      <div class="progress-bar">
-        <div :style="`width: ${progress}%;`"></div>
-      </div>
+        <div class="progress-bar">
+          <div :style="`width: ${progress}%;`"></div>
+        </div>
 
-      <!-- Actions -->
-      <div class="buttons">
-        <button
-          @click="goBack"
-          v-if="currentStepNumber > 1"
-          class="btn-outlined">Back
-        </button>
-        <button
-          @click="goNext"
-          class="btn">{{ isFormComplete ? 'Complete' : 'Next' }}</button>
+        <!-- Actions -->
+        <div class="buttons">
+          <button
+            @click="goBack"
+            v-if="currentStepNumber > 1"
+            class="btn-outlined">Back
+          </button>
+          <button
+            @click="goNext"
+            class="btn">{{ isFormComplete ? 'Complete' : 'Next' }}</button>
+        </div>
       </div>
-    </template>
+    </Transition>
   </div>
 </template>
 
