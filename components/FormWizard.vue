@@ -12,9 +12,10 @@ useSeoMeta({
 
 const {
   form,
-  currentStepNumber,
   goNext,
   goBack,
+  restart,
+  currentStepNumber,
   showCompleteMessage } = useWizard()
 
 const length = computed(() => steps.length)
@@ -23,12 +24,6 @@ const progress = computed(() => {
   return currentStepNumber.value / length.value * 100
 })
 const isFormComplete = computed(() => currentStepNumber.value === steps.length)
-
-function restart() {
-  Object.assign(form, defaultData)
-  currentStepNumber.value = 1
-  showCompleteMessage.value = false
-}
 </script>
 
 <template>
@@ -45,7 +40,9 @@ function restart() {
       </div>
     </template>
     <template v-else>
-      <component :is="currentStep" />
+      <Transition name="wizard">
+        <component :is="currentStep" />
+      </Transition>
 
       <div class="progress-bar">
         <div :style="`width: ${progress}%;`"></div>
@@ -65,3 +62,21 @@ function restart() {
     </template>
   </div>
 </template>
+
+<style lang="css">
+.wizard-move,
+.wizard-enter-active,
+.wizard-leave-active {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.wizard-enter-from,
+.wizard-leave-to {
+  opacity: 0;
+  transform: translateX(300px);
+}
+
+.wizard-leave-active {
+  position: absolute;
+}
+</style>

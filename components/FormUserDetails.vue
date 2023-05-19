@@ -56,7 +56,7 @@ function login() {
 
       <TransitionGroup
         class="buttons"
-        name="sign-btns"
+        name="wizard"
         tag="div">
         <button
           v-if="!creatingAcount && !isLoggedIn"
@@ -85,21 +85,3 @@ function login() {
     </div>
   </div>
 </template>
-
-<style scoped lang="css">
-.sign-btns-move,
-.sign-btns-enter-active,
-.sign-btns-leave-active {
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.sign-btns-enter-from,
-.sign-btns-leave-to {
-  opacity: 0;
-  transform: translateX(30px);
-}
-
-.sign-btns-leave-active {
-  position: absolute;
-}
-</style>
