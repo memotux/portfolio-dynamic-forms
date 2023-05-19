@@ -10,10 +10,12 @@ useSeoMeta({
   title: 'Liquid Gold Box'
 })
 
-const { form, canGoNext } = useWizard()
-
-const currentStepNumber = ref(1)
-const showCompleteMessage = ref(false)
+const {
+  form,
+  currentStepNumber,
+  goNext,
+  goBack,
+  showCompleteMessage } = useWizard()
 
 const length = computed(() => steps.length)
 const currentStep = computed(() => steps[currentStepNumber.value - 1])
@@ -22,29 +24,9 @@ const progress = computed(() => {
 })
 const isFormComplete = computed(() => currentStepNumber.value === steps.length)
 
-function goBack() {
-  currentStepNumber.value -= 1
-}
-function goNext() {
-  if (isFormComplete.value) {
-    showCompleteMessage.value = true
-  } else {
-    currentStepNumber.value += 1
-  }
-}
 function restart() {
-  Object.assign(form, {
-    plan: null,
-    email: null,
-    name: null,
-    password: null,
-    address: null,
-    recipient: null,
-    chocolate: false,
-    otherTreat: false
-  })
+  Object.assign(form, defaultData)
   currentStepNumber.value = 1
-  canGoNext.value = false
   showCompleteMessage.value = false
 }
 </script>
@@ -78,7 +60,6 @@ function restart() {
         </button>
         <button
           @click="goNext"
-          :disabled="!canGoNext"
           class="btn">{{ isFormComplete ? 'Complete' : 'Next' }}</button>
       </div>
     </template>

@@ -1,59 +1,21 @@
 <script setup lang="ts">
-import { useVuelidate } from '@vuelidate/core'
-import { required, email } from '@vuelidate/validators'
-import type { FormWizard } from '~/types';
+const { form, $v } = useWizard()
 
-const { form, processStep, canGoNext } = useWizard()
-
-const validations = {
-  email: {
-    required,
-    email
-  },
-  password: {
-    required
-  },
-  name: {
-    required
-  }
-}
-
-const state = reactive<Pick<FormWizard, 'email' | 'password' | 'name'>>({
-  email: form.email,
-  password: form.password,
-  name: form.name,
-})
 const userExist = ref(false)
 const creatingAcount = ref(false)
 const pending = ref(false)
 
-const $v = useVuelidate(validations, state)
-const isLoggedIn = computed(() => form.email && form.name)
+const isLoggedIn = computed(() => Boolean(form.email) && Boolean(form.name))
 const canLogin = computed(() => !$v.value.email.$invalid && !$v.value.password.$invalid)
 
-function submit() {
-  if (!$v.value.$invalid) {
-    processStep({ ...state })
-  }
-}
 function login() {
   pending.value = true
   setTimeout(() => {
+    form.name = 'Romeo'
     userExist.value = true
-    state.name = 'Romeo'
-    submit()
     pending.value = false
   }, 3000);
 }
-
-watchEffect(() => {
-  if ($v.value.$invalid && canGoNext.value) {
-    canGoNext.value = false
-  }
-  if (!$v.value.$invalid && !canGoNext.value) {
-    canGoNext.value = true
-  }
-})
 </script>
 
 <template>
@@ -64,7 +26,7 @@ watchEffect(() => {
       Create an account or log in to order your liquid gold subscription
     </h2>
 
-    <form @input="submit" class="form" style="flex-direction: column;">
+    <form class="form" style="flex-direction: column;">
       <div class="form-group">
         <label class="form-label" for="email">Email</label>
         <input type="text" v-model="$v.email.$model"
@@ -107,7 +69,7 @@ watchEffect(() => {
           class="btn"
           style="background-color: transparent; border-color: transparent; margin: 0 1rem 0 0; color:#09848d">Or</span>
         <button
-          v-if="!canGoNext"
+          v-if="!isLoggedIn"
           @click.prevent="creatingAcount = true"
           :disabled="creatingAcount"
           type="button"

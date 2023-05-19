@@ -22,16 +22,11 @@ const plans: Plan[] = [
   }
 ]
 
-const { form, processStep, canGoNext } = useWizard()
+const { form, $v } = useWizard()
 
-function pickPlan(payload: Plan) {
-  processStep({ plan: payload })
+function submit(payload: Plan) {
+  form.plan = payload
 }
-watchEffect(() => {
-  if (form.plan) {
-    canGoNext.value = true
-  }
-})
 </script>
 
 <template>
@@ -46,7 +41,7 @@ watchEffect(() => {
       <div
         v-for="plan in plans"
         :key="plan.price"
-        @click="pickPlan(plan)"
+        @click="submit(plan)"
         :class="{ 'active-plan': form.plan?.name === plan.name }"
         class="plan">
         <div class="weight">
@@ -66,7 +61,8 @@ watchEffect(() => {
         </div>
       </div>
     </div>
-    <!-- <div v-if="!state.selectedPlan" class="error">you should pick a plan to continue
-    </div> -->
+    <div v-if="$v.plan.$invalid" class="error">
+      you should pick a plan to continue
+    </div>
   </div>
 </template>
