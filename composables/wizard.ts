@@ -46,6 +46,8 @@ function goNext() {
     case 1:
       if (!$v.value.plan.$invalid) {
         currentStepNumber.value += 1
+      } else {
+        $v.value.plan.$touch()
       }
       break;
     case 2:
@@ -84,11 +86,28 @@ function goBack() {
   currentStepNumber.value -= 1
 }
 
+function restart() {
+  Object.assign(form, {
+    plan: null,
+    email: null,
+    name: null,
+    password: null,
+    address: null,
+    recipient: null,
+    chocolate: false,
+    otherTreat: false
+  })
+  currentStepNumber.value = 1
+  showCompleteMessage.value = false
+  $v.value.$reset()
+}
+
 export const useWizard = () => ({
   form,
+  $v,
   currentStepNumber,
+  showCompleteMessage,
   goNext,
   goBack,
-  $v,
-  showCompleteMessage
+  restart
 })
