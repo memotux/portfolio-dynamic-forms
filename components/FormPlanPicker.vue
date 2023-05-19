@@ -61,7 +61,7 @@ function submit(payload: Plan) {
         </div>
       </div>
     </div>
-    <div v-if="$v.plan.$invalid" class="error">
+    <div v-if="$v.plan.$error" class="error">
       you should pick a plan to continue
     </div>
   </div>
